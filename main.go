@@ -4,28 +4,37 @@ package main
 import "C"
 
 import (
-	"io/ioutil"
+	"fmt"
+	"io"
 	"net/http"
 	"os"
 
-	"github.com/nanitefactory/winmb"
+	"github.com/pkg/browser"
+	"github.com/sqweek/dialog"
 	"golang.org/x/mod/semver"
 )
 
-const currentVersion = "v0.0.1"
+const currentVersion = "v1.0.0"
 
 const versionFileURL = "https://raw.githubusercontent.com/MikMik1011/gtasrbija-updatechecker/master/info/version.txt"
+const downloadURL = "https://www.gtasrbija.net/download"
+
+const dialTitle = "GTA Srbija Update Checker"
+const reqErrText = "Greska prilikom dobijanja informacije o najnovijoj verziji!"
+const readErrText = "Greska prilikom obrade informacije o najnovijoj verziji!"
+const newVerText = "Nova verzija moda je dostupna! \n\nTrenutna verzija: %s \nNova verzija: %s \n\nDa li zelite da preuzmete novu verziju?"
+const unrelText = "Koristite noviju, neobjavljenu verziju! \nImajte na umu da je ZABRANJENO leakovanje novih stvari bez odobrenja autora!"
 
 func fetchVersion() string {
 	res, err := http.Get(versionFileURL)
 	if err != nil {
-		winmb.MessageBoxPlain("GTA Srbija Update Checker", "Greska prilikom dobijanja informacije o najnovijoj verziji!")
+		dialog.Message(reqErrText).Title(dialTitle).Error()
 		os.Exit(1)
 	}
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		winmb.MessageBoxPlain("GTA Srbija Update Checker", "Greska prilikom parsovanja informacije o najnovijoj verziji!")
+		dialog.Message(readErrText).Title(dialTitle).Error()
 		os.Exit(1)
 	}
 
@@ -41,9 +50,12 @@ func MainThread() {
 
 	switch diff {
 	case -1:
-		winmb.MessageBoxPlain("GTA Srbija Update Checker", "Nova verzija je dostupna!")
+		if dialog.Message(fmt.Sprintf(newVerText, currentVersion, newestVersion)).Title(dialTitle).YesNo() {
+			browser.OpenURL(downloadURL)
+		}
+
 	case 1:
-		winmb.MessageBoxPlain("GTA Srbija Update Checker", "Koristite noviju verziju moda nego sto je izasla!")
+		dialog.Message(unrelText).Title(dialTitle).Info()
 	}
 
 }
