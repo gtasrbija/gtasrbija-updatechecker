@@ -9,9 +9,12 @@ import (
 	"os"
 
 	"github.com/nanitefactory/winmb"
+	"golang.org/x/mod/semver"
 )
 
-const versionFileURL = "https://raw.githubusercontent.com/MikMik1011/gtasrbija-updatechecker/master/info/version.json"
+const currentVersion = "0.0.2"
+
+const versionFileURL = "https://raw.githubusercontent.com/MikMik1011/gtasrbija-updatechecker/master/info/version.txt"
 
 func fetchVersion() string {
 	res, err := http.Get(versionFileURL)
@@ -32,7 +35,16 @@ func fetchVersion() string {
 
 //export MainThread
 func MainThread() {
-	winmb.MessageBoxPlain("GTA Srbija Update Checker", fetchVersion())
+	newestVersion := fetchVersion()
+
+	diff := semver.Compare(currentVersion, newestVersion)
+
+	switch diff {
+	case -1:
+		winmb.MessageBoxPlain("GTA Srbija Update Checker", "Nova verzija je dostupna!")
+	case 1:
+		winmb.MessageBoxPlain("GTA Srbija Update Checker", "Koristite noviju verziju moda nego sto je izasla!")
+	}
 
 }
 
