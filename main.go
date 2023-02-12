@@ -12,7 +12,7 @@ import (
 	"golang.org/x/mod/semver"
 )
 
-const currentVersion = "0.0.2"
+const currentVersion = "v0.0.1"
 
 const versionFileURL = "https://raw.githubusercontent.com/MikMik1011/gtasrbija-updatechecker/master/info/version.txt"
 
