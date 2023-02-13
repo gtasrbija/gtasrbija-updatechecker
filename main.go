@@ -44,6 +44,9 @@ func fetchVersion() string {
 //export MainThread
 func MainThread() {
 	newestVersion := fetchVersion()
+	if !semver.IsValid(currentVersion) || !semver.IsValid(newestVersion) {
+		return
+	}
 
 	diff := semver.Compare(currentVersion, newestVersion)
 
