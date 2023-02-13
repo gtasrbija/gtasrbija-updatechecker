@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 
 	"github.com/pkg/browser"
 	"github.com/sqweek/dialog"
@@ -29,13 +28,13 @@ func fetchVersion() string {
 	res, err := http.Get(versionFileURL)
 	if err != nil {
 		dialog.Message(reqErrText).Title(dialTitle).Error()
-		os.Exit(1)
+		return ""
 	}
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		dialog.Message(readErrText).Title(dialTitle).Error()
-		os.Exit(1)
+		return ""
 	}
 
 	return string(body)
