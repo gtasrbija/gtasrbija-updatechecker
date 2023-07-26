@@ -15,7 +15,7 @@ import (
 
 const currentVersion = "v1.0.0"
 
-const versionFileURL = "https://raw.githubusercontent.com/MikMik1011/gtasrbija-updatechecker/master/info/version.txt"
+const versionFileURL = "https://raw.githubusercontent.com/gtasrbija/gtasrbija-updatechecker/master/info/version.txt"
 const downloadURL = "https://www.gtasrbija.net/download"
 
 const dialTitle = "GTA Srbija Update Checker"
